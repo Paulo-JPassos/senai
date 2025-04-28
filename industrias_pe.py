@@ -18,37 +18,44 @@ if os.path.exists(csv_file):
 
     st.markdown("### Visão geral")
 
-     # Exibe os dados carregados
+    # Exibe os dados carregados
     st.markdown("### Dados das indústrias de PE")
     st.dataframe(df.head(1000))
 
-     # Filtros de seleção
-
-    st.write(df.head(1000))
-
+    # Filtros de seleção
     st.sidebar.header("Filtros")
 
-### Multiselect
+    # Filtro multiselect para "Porte da Empresa"
+    selected_porte = st.sidebar.multiselect(
+        "Selecione o Porte da Empresa", 
+        options=df['Porte da Empresa'].unique(),  # Exclui valores nulos se houver
+        default=df['Porte da Empresa'].unique()
+    )
 
-selected_porte = st.sidebar.multiselect(
-    "Selecione o Porte da Empresa", 
-    options=df['Porte da Empresa'].unique(),  # Exclui valores nulos se houver
-    default=df['Porte da Empresa'].unique()
-)
+    # Filtro multiselect para "Situação Cadastral"
+    selected_situacao = st.sidebar.multiselect(
+        "Situação Cadastral", 
+        options=df['Situação Cadastral'].dropna().unique(),
+        default=df['Situação Cadastral'].dropna().unique()
+    )
 
-selected_situacao = st.sidebar.multiselect(
-    "Situação Cadastral", 
-    options=df['Situação Cadastral'].dropna().unique(),
-    default=df['Situação Cadastral'].dropna().unique()
-)
+    # Filtro selectbox para "Nome Fantasia" (você pode mudar a coluna conforme necessário)
+    selected_nome_fantasia = st.sidebar.selectbox(
+        "Selecione o Nome Fantasia", 
+        options=df['Nome Fantasia'].dropna().unique(),  # Exclui valores nulos
+        index=0  # Define o primeiro item como padrão
+    )
 
-### Selectbox
+    # Aplicando os filtros no DataFrame
+    df_filtered = df[
+        (df['Porte da Empresa'].isin(selected_porte)) &  # Filtra pelo porte da empresa
+        (df['Situação Cadastral'].isin(selected_situacao)) &  # Filtra pela situação cadastral
+        (df['Nome Fantasia'] == selected_nome_fantasia)  # Filtra pelo nome fantasia
+    ]
 
-#desenvolver aqui
-
-    #selected_store = st.sidebar.multiselect("Selecione o Porte da Empresa", options=df['Porte da Empresa'].unique(), default=df['Porte da Empresa'].unique())
-    #selected_model = st.sidebar.multiselect("Situação Cadastral", options=df['Situação Cadastral'].unique(), default=df['Situação Cadastral'].unique())
-    #selected_date_range = st.sidebar.date_input("Selecione o Nome", [df['Nome Fantasia'].min(), df['Nome Fantasia'].max()])
-
-
-#python -m streamlit run industrias_pe.py
+    # Exibindo o DataFrame filtrado
+    st.write("DataFrame filtrado:", df_filtered)
+    st.dataframe(df_filtered)  # Exibindo o DataFrame filtrado com formatação de tabela
+else:
+    # Caso o arquivo CSV não seja encontrado, exibe uma mensagem de erro
+    st.error(f"O arquivo {csv_file} não foi encontrado.")
