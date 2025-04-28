@@ -20,26 +20,62 @@ if os.path.exists(csv_file):
 
      # Exibe os dados carregados
     st.markdown("### Dados das indústrias de PE")
-    st.dataframe(df.head(10))
+    st.dataframe(df.head(1000))
 
      # Filtros de seleção
+
+    st.write(df.head(1000))
+
     st.sidebar.header("Filtros")
 
-selected_porte = st.sidebar.multiselect(
-    "Selecione o Porte da Empresa", 
-    options=df['Porte da Empresa'].dropna().unique(),  # Exclui valores nulos se houver
-    default=df['Porte da Empresa'].dropna().unique()
-)
+### Multiselect
+#selected_porte = st.sidebar.multiselect(
+ #   "Selecione o Porte da Empresa", 
+  #  options=df['Porte da Empresa'].dropna().unique(),  # Exclui valores nulos se houver
+   # default=df['Porte da Empresa'].dropna().unique()
+#)
 
-selected_situacao = st.sidebar.multiselect(
-    "Situação Cadastral", 
-    options=df['Situação Cadastral'].dropna().unique(),
-    default=df['Situação Cadastral'].dropna().unique()
-)
+#selected_situacao = st.sidebar.multiselect(
+ #   "Situação Cadastral", 
+  #  options=df['Situação Cadastral'].dropna().unique(),
+   # default=df['Situação Cadastral'].dropna().unique()
+#)
+
+### Selectbox
+
+# Verificar se a coluna 'Porte da Empresa' existe
+if 'Porte da Empresa' in df.columns:
+    # Exibir as colunas para conferirmos o nome exato
+    st.write("Colunas disponíveis:", df.columns)
+
+    # Filtros com Selectbox, ordenando as opções alfabeticamente
+    selected_porte = st.sidebar.selectbox(
+        "Selecione o Porte da Empresa", 
+        options=sorted(df['Porte da Empresa'].dropna().unique())  # Ordena alfabeticamente
+    )
+
+    selected_situacao = st.sidebar.selectbox(
+        "Situação Cadastral", 
+        options=sorted(df['Situação Cadastral'].dropna().unique())  # Ordena alfabeticamente
+    )
+
+    # Aplicando os filtros no DataFrame
+    df_filtered = df[
+        (df['Porte da Empresa'] == selected_porte) &
+        (df['Situação Cadastral'] == selected_situacao)
+    ]
+    
+    # Exibindo o DataFrame filtrado
+    st.write("DataFrame filtrado:", df_filtered)
+else:
+    # Caso a coluna 'Porte da Empresa' não seja encontrada, exibe uma mensagem de erro
+    st.error("Coluna 'Porte da Empresa' não encontrada no DataFrame!")
+# Exibindo o DataFrame filtrado
+st.dataframe(df_filtered)
 
     #selected_store = st.sidebar.multiselect("Selecione o Porte da Empresa", options=df['Porte da Empresa'].unique(), default=df['Porte da Empresa'].unique())
     #selected_model = st.sidebar.multiselect("Situação Cadastral", options=df['Situação Cadastral'].unique(), default=df['Situação Cadastral'].unique())
     #selected_date_range = st.sidebar.date_input("Selecione o Nome", [df['Nome Fantasia'].min(), df['Nome Fantasia'].max()])
 
 
-    
+#python -m streamlit run industrias_pe.py
