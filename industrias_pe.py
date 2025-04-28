@@ -72,7 +72,7 @@ if os.path.exists(csv_file):
         # Caso alguma coluna necessária não seja encontrada, exibe uma mensagem de erro
         st.error("As colunas 'Porte da Empresa' e/ou 'Situação Cadastral' não foram encontradas no DataFrame!")
 
-st.dataframe(df_filtered)
+    st.dataframe(df_filtered)
 
     #selected_store = st.sidebar.multiselect("Selecione o Porte da Empresa", options=df['Porte da Empresa'].unique(), default=df['Porte da Empresa'].unique())
     #selected_model = st.sidebar.multiselect("Situação Cadastral", options=df['Situação Cadastral'].unique(), default=df['Situação Cadastral'].unique())
