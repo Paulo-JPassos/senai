@@ -18,7 +18,7 @@ st.markdown("### Visão geral")
 
 # Exibe os dados carregados
 st.markdown("### Dados das indústrias de PE")
-st.dataframe(df.head(1000))
+st.dataframe(df.head(10))
 
 # Filtros de seleção
 st.sidebar.header("Filtros")
@@ -37,22 +37,24 @@ selected_situacao = st.sidebar.multiselect(
     default=df['Situação Cadastral'].dropna().unique()
 )
 
-# Filtro selectbox para "Nome Fantasia" (você pode mudar a coluna conforme necessário)
-selected_nome_fantasia = st.sidebar.selectbox(
-    "Selecione o Nome Fantasia", 
-    options=df['Nome Fantasia'].dropna().unique(),  # Exclui valores nulos
-    index=0  # Define o primeiro item como padrão
-)
-
 # Aplicando os filtros no DataFrame
 df_filtered = df[
     (df['Porte da Empresa'].isin(selected_porte)) &  # Filtra pelo porte da empresa
-    (df['Situação Cadastral'].isin(selected_situacao)) &  # Filtra pela situação cadastral
-    (df['Nome Fantasia'] == selected_nome_fantasia)  # Filtra pelo nome fantasia
+    (df['Situação Cadastral'].isin(selected_situacao))  # Filtra pela situação cadastral
 ]
 
 # Exibindo o DataFrame filtrado
 st.write("DataFrame filtrado:", df_filtered)
 st.dataframe(df_filtered)  # Exibindo o DataFrame filtrado com formatação de tabela
 
+# Gráfico de vendas por porte da empresa
+st.markdown("### Gráfico de Porte da Empresa")
+# Corrigido para utilizar o DataFrame filtrado corretamente
+sales_by_porte = df_filtered.groupby('Porte da Empresa').size().sort_values(ascending=False)
+st.bar_chart(sales_by_porte)
 
+# Gráfico de vendas por situação cadastral
+st.markdown("### Gráfico de Situação Cadastral")
+# Corrigido para utilizar o DataFrame filtrado corretamente
+sales_by_situacao = df_filtered.groupby('Situação Cadastral').size().sort_values(ascending=False)
+st.bar_chart(sales_by_situacao)
