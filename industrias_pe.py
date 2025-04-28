@@ -43,17 +43,18 @@ if os.path.exists(csv_file):
 
 ### Selectbox
 
-# Verificar se a coluna 'Porte da Empresa' existe
-if 'Porte da Empresa' in df.columns:
-    # Exibir as colunas para conferirmos o nome exato
-    st.write("Colunas disponíveis:", df.columns)
+# Remover espaços extras nos nomes das colunas
+df.columns = df.columns.str.strip()
 
-    # Filtros com Selectbox, ordenando as opções alfabeticamente
+# Verificar se as colunas necessárias existem
+if 'Porte da Empresa' in df.columns and 'Situação Cadastral' in df.columns:
+    # Seleção do "Porte da Empresa"
     selected_porte = st.sidebar.selectbox(
         "Selecione o Porte da Empresa", 
         options=sorted(df['Porte da Empresa'].dropna().unique())  # Ordena alfabeticamente
     )
 
+    # Seleção da "Situação Cadastral"
     selected_situacao = st.sidebar.selectbox(
         "Situação Cadastral", 
         options=sorted(df['Situação Cadastral'].dropna().unique())  # Ordena alfabeticamente
@@ -67,10 +68,14 @@ if 'Porte da Empresa' in df.columns:
     
     # Exibindo o DataFrame filtrado
     st.write("DataFrame filtrado:", df_filtered)
+    
+    # Exibindo o DataFrame filtrado com uma formatação de tabela
+    st.dataframe(df_filtered)
+    
 else:
-    # Caso a coluna 'Porte da Empresa' não seja encontrada, exibe uma mensagem de erro
-    st.error("Coluna 'Porte da Empresa' não encontrada no DataFrame!")
-# Exibindo o DataFrame filtrado
+    # Caso alguma coluna necessária não seja encontrada, exibe uma mensagem de erro
+    st.error("As colunas 'Porte da Empresa' e/ou 'Situação Cadastral' não foram encontradas no DataFrame!")
+
 st.dataframe(df_filtered)
 
     #selected_store = st.sidebar.multiselect("Selecione o Porte da Empresa", options=df['Porte da Empresa'].unique(), default=df['Porte da Empresa'].unique())
