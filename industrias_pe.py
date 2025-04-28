@@ -9,7 +9,7 @@ import datetime as dt
 st.title("Indústrias de Pernambuco")
 
 # Caminho do arquivo CSV na mesma pasta
-csv_file = "industrias_Pe.csv"
+csv_file = "Industrias_Pernambuco.csv"
 
 # Verifica se o arquivo CSV existe na mesma pasta
 if os.path.exists(csv_file):
