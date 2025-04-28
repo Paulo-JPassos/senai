@@ -44,7 +44,7 @@ if os.path.exists(csv_file):
 ### Selectbox
 
 # Remover espaços extras nos nomes das colunas
-df.columns = df.columns.str.strip()
+#df.columns = df.columns.str.strip()
 
 # Verificar se as colunas necessárias existem
 if 'Porte da Empresa' in df.columns and 'Situação Cadastral' in df.columns:
