@@ -29,10 +29,11 @@ if os.path.exists(csv_file):
     st.sidebar.header("Filtros")
 
 ### Multiselect
+
 selected_porte = st.sidebar.multiselect(
     "Selecione o Porte da Empresa", 
-    options=df['Porte da Empresa'].dropna().unique(),  # Exclui valores nulos se houver
-    default=df['Porte da Empresa'].dropna().unique()
+    options=df['Porte da Empresa'].unique(),  # Exclui valores nulos se houver
+    default=df['Porte da Empresa'].unique()
 )
 
 selected_situacao = st.sidebar.multiselect(
